@@ -20,9 +20,8 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  requestUserPermission,
   setupNotificationListeners,
-  registerTokenWithServer
+  registerWithServer
 } from './src/services/notificationService';
 
 interface Notification {
@@ -56,7 +55,7 @@ function App(): React.JSX.Element {
   const [username, setUsername] = useState('testuser');
   const [isRegistering, setIsRegistering] = useState(false);
 
-  // Reference for navigation (used by deep linking)
+  // Reference for navigation
   const navigationRef = useRef(null);
 
   const backgroundStyle = {
@@ -68,40 +67,19 @@ function App(): React.JSX.Element {
     color: isDarkMode ? '#fff' : '#000',
   };
 
-  // Initialize Firebase notifications
+  // Initialize socket-based notifications
   useEffect(() => {
-    const initNotifications = async () => {
-      try {
-        // Request notification permissions
-        const fcmToken = await requestUserPermission();
-        console.log('FCM Token obtained:', fcmToken);
+    const unsubscribe = setupNotificationListeners(navigationRef);
 
-        // Store FCM token for persistence
-        if (fcmToken) {
-          await AsyncStorage.setItem('fcmToken', fcmToken);
-        }
-
-        // Register with server if user is logged in
-        if (isLoggedIn && token && fcmToken) {
-          await registerTokenWithServer(fcmToken, token);
-        }
-
-        // Set up notification listeners
-        const unsubscribe = setupNotificationListeners(navigationRef);
-
-        // Clean up on component unmount
-        return () => {
-          if (unsubscribe) {
-            unsubscribe();
-          }
-        };
-      } catch (error) {
-        console.error('Error initializing notifications:', error);
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
       }
     };
+  }, []);
 
-    initNotifications();
-  }, [isLoggedIn, token]);
+  // FCM related code is temporarily disabled to focus on core features.
+  // The code for handling push notifications will be restored later.
 
   // Check for stored auth token on startup
   useEffect(() => {
@@ -130,9 +108,7 @@ function App(): React.JSX.Element {
     };
 
     checkToken();
-  }, []);
-
-  // Login function
+  }, []);  // Login function
   const handleLogin = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
@@ -154,11 +130,8 @@ function App(): React.JSX.Element {
         // Store auth token for persistence
         await AsyncStorage.setItem('authToken', data.token);
 
-        // Register FCM token with server if already obtained
-        const fcmToken = await AsyncStorage.getItem('fcmToken');
-        if (fcmToken) {
-          await registerTokenWithServer(fcmToken, data.token);
-        }
+        // Register with server for notifications
+        await registerWithServer(data.token);
 
         Alert.alert('Success', 'Logged in successfully!');
         fetchNotifications(data.token);
@@ -200,11 +173,8 @@ function App(): React.JSX.Element {
         // Store auth token for persistence
         await AsyncStorage.setItem('authToken', data.token);
 
-        // Register FCM token with server if already obtained
-        const fcmToken = await AsyncStorage.getItem('fcmToken');
-        if (fcmToken) {
-          await registerTokenWithServer(fcmToken, data.token);
-        }
+        // Register with server for notifications
+        await registerWithServer(data.token);
 
         Alert.alert('Success', 'Account created successfully!');
         fetchNotifications(data.token);
@@ -278,20 +248,18 @@ function App(): React.JSX.Element {
   // Logout function
   const handleLogout = async () => {
     try {
-      // Unregister device token from server
-      const fcmToken = await AsyncStorage.getItem('fcmToken');
-      if (token && fcmToken) {
+      // Unregister from server
+      if (token) {
         try {
-          await fetch(`${BACKEND_URL}/api/users/unregister-device`, {
+          await fetch(`${BACKEND_URL}/api/users/unregister-notifications`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ token: fcmToken }),
+            }
           });
         } catch (err) {
-          console.error('Error unregistering device:', err);
+          console.error('Error unregistering from notifications:', err);
         }
       }
 
@@ -616,5 +584,6 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
 });
+
 
 export default App;

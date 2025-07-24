@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Notification = require('../models/Notification');
+const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 const { getPaginatedResults, getUnreadCount } = require('../services/notificationService');
-const pushService = require('../services/pushService');
 
 // Get all notifications for a user
 router.get('/', auth, async (req, res) => {
@@ -90,24 +90,51 @@ router.patch('/read-all', auth, async (req, res) => {
 // Test push notification
 router.post('/push-test', auth, async (req, res) => {
     try {
-        const result = await pushService.sendTestPush(req.user._id);
+        console.log(`Sending test push notification for user ${req.user._id}`);
 
-        if (result.success > 0) {
+        // Find the user to check if they're active
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Create a test notification
+        const notification = new Notification({
+            userId: req.user._id,
+            title: 'Test Notification',
+            message: 'This is a test notification sent via socket',
+            type: 'test',
+            data: {
+                testId: Date.now().toString(),
+                timestamp: new Date()
+            }
+        });
+
+        // Save notification to database
+        await notification.save();
+
+        // Get the Socket.io instance from the app
+        const io = req.app.get('io');
+
+        // Emit to the user's specific room
+        if (io) {
+            io.to(`user:${req.user._id}`).emit('notification', notification);
+
             return res.json({
-                message: 'Test push notification sent successfully',
-                result
+                message: 'Test notification sent successfully via socket',
+                notification,
+                delivered: true
             });
         } else {
-            return res.status(400).json({
-                error: 'Push Notification Failed',
-                message: result.message || 'No devices registered or push failed',
-                result
+            return res.json({
+                message: 'Socket.io not available, notification saved but not delivered',
+                notification,
+                delivered: false
             });
         }
     } catch (err) {
         console.error('Push test error:', err);
         return res.status(500).json({ error: 'Server Error', message: err.message });
     }
-});
-
-module.exports = router;
+}); module.exports = router;

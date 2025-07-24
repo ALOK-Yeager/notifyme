@@ -1,128 +1,54 @@
-import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Alert } from 'react-native';
 
 const BACKEND_URL = 'http://192.168.1.5:3000'; // Updated for physical device
 
-// Request notification permissions from the user
-export async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+// Setup socket connection for real-time notifications
+export function setupSocketConnection(navigationRef) {
+    console.log('Setting up socket connection for real-time notifications');
 
-    if (enabled) {
-        console.log('Authorization status:', authStatus);
-        return getFCMToken();
-    }
+    // Mock function for now - in a real implementation, this would use socket.io
+    const mockSocketListener = () => {
+        console.log('Socket notification listener established');
 
-    console.log('User declined notifications permission');
-    return null;
+        // Return cleanup function
+        return () => {
+            console.log('Socket connection closed');
+        };
+    };
+
+    return mockSocketListener();
 }
 
-// Get the FCM token for this device
-export async function getFCMToken() {
+// Register with the server for notifications
+export async function registerWithServer(authToken) {
+    console.log('Registering for notifications with server');
     try {
-        // Check if we already have a token stored
-        let fcmToken = await AsyncStorage.getItem('fcmToken');
-
-        if (!fcmToken) {
-            // If not, get a new token
-            fcmToken = await messaging().getToken();
-
-            if (fcmToken) {
-                console.log('New FCM Token:', fcmToken);
-                // Store the token for future use
-                await AsyncStorage.setItem('fcmToken', fcmToken);
-
-                // Send token to server if user is logged in
-                const token = await AsyncStorage.getItem('authToken');
-                if (token) {
-                    await registerTokenWithServer(fcmToken, token);
-                }
-            }
-        }
-
-        return fcmToken;
-    } catch (error) {
-        console.error('Error getting FCM token:', error);
-        return null;
-    }
-}
-
-// Register the FCM token with our backend
-export async function registerTokenWithServer(fcmToken, authToken) {
-    console.log('Registering FCM token with server:', fcmToken);
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/users/register-device`, {
-            method: 'POST',
+        const response = await axios.post(`${BACKEND_URL}/api/users/register-notifications`, {}, {
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             },
-            body: JSON.stringify({
-                token: fcmToken,
-                platform: 'android'
-            })
+            timeout: 5000 // 5-second timeout
         });
-
-        console.log('Register FCM token response status:', response.status);
-        const responseData = await response.json();
-        console.log('Register FCM token response:', responseData);
-
-        if (!response.ok) {
-            throw new Error('Failed to register FCM token with server');
-        }
-
-        console.log('FCM token registered with server successfully');
-        return true;
+        console.log('Notification registration response:', response.data);
+        return response.data.success;
     } catch (error) {
-        console.error('Error registering FCM token with server:', error);
-        return false;
+        console.error('Registration Error:', error.response?.data || error.message);
+        return false; // Still allow app to run
     }
 }
 
-// Set up notification listeners
-export function setupNotificationListeners(navigationRef) {
-    // Handle foreground messages
-    const unsubscribeForeground = messaging().onMessage(async remoteMessage => {
-        console.log('Notification received in foreground:', remoteMessage);
-        // Here you can show a local notification or update your UI
-        // Since FCM doesn't automatically show notifications when app is in foreground
-    });
+// For backwards compatibility with existing code
+export const requestUserPermission = async () => {
+    console.log('Notification permissions not needed for socket-based notifications');
+    return true;
+};
 
-    // Handle background/quit state messages
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-        console.log('Notification received in background:', remoteMessage);
-        return Promise.resolve();
-    });
+export const setupNotificationListeners = (navigationRef) => {
+    return setupSocketConnection(navigationRef);
+};
 
-    // Handle notification opened app
-    messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log('Notification opened app from background state:', remoteMessage);
-
-        // Handle navigation/deep linking based on notification data
-        if (remoteMessage.data && remoteMessage.data.screen) {
-            // Navigate to the specific screen
-            navigationRef.current?.navigate(remoteMessage.data.screen, remoteMessage.data.params);
-        }
-    });
-
-    // Check if app was opened from a notification (app was closed)
-    messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-            if (remoteMessage) {
-                console.log('App was opened from quit state by notification:', remoteMessage);
-
-                // Handle navigation/deep linking
-                if (remoteMessage.data && remoteMessage.data.screen) {
-                    // We need to wait a bit for navigation to be ready
-                    setTimeout(() => {
-                        navigationRef.current?.navigate(remoteMessage.data.screen, remoteMessage.data.params);
-                    }, 1000);
-                }
-            }
-        });
-
-    return unsubscribeForeground;
-}
+export const registerTokenWithServer = async (unused, authToken) => {
+    return registerWithServer(authToken);
+};

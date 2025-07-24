@@ -21,9 +21,13 @@ router.get('/me', auth, async (req, res) => {
 // Register a device token for push notifications
 router.post('/register-device', auth, async (req, res) => {
     try {
-        const { token, platform = 'android' } = req.body;
+        const { deviceId, platform = 'android' } = req.body;
+        const token = deviceId || req.body.token;
+        console.log(`Registering device token: ${token}`);
+        console.log('Request body:', req.body);
 
         if (!token) {
+            logger.error('Token is required but was not provided in request');
             return res.status(400).json({ error: 'Token is required' });
         }
 
@@ -51,7 +55,7 @@ router.post('/register-device', auth, async (req, res) => {
         });
 
         await user.save();
-        logger.info(`Device token registered for user ${user._id}`);
+        logger.info(`Device token registered for user ${user._id}, Token: ${token.substring(0, 10)}...`);
 
         res.status(201).json({ message: 'Device token registered successfully', token });
     } catch (error) {
