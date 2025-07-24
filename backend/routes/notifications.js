@@ -3,6 +3,7 @@ const router = express.Router();
 const Notification = require('../models/Notification');
 const { auth } = require('../middleware/auth');
 const { getPaginatedResults, getUnreadCount } = require('../services/notificationService');
+const pushService = require('../services/pushService');
 
 // Get all notifications for a user
 router.get('/', auth, async (req, res) => {
@@ -89,7 +90,6 @@ router.patch('/read-all', auth, async (req, res) => {
 // Test push notification
 router.post('/push-test', auth, async (req, res) => {
     try {
-        const pushService = require('../services/pushService');
         const result = await pushService.sendTestPush(req.user._id);
 
         if (result.success > 0) {

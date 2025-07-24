@@ -51,6 +51,7 @@ export async function getFCMToken() {
 
 // Register the FCM token with our backend
 export async function registerTokenWithServer(fcmToken, authToken) {
+    console.log('Registering FCM token with server:', fcmToken);
     try {
         const response = await fetch(`${BACKEND_URL}/api/users/register-device`, {
             method: 'POST',
@@ -63,6 +64,10 @@ export async function registerTokenWithServer(fcmToken, authToken) {
                 platform: 'android'
             })
         });
+
+        console.log('Register FCM token response status:', response.status);
+        const responseData = await response.json();
+        console.log('Register FCM token response:', responseData);
 
         if (!response.ok) {
             throw new Error('Failed to register FCM token with server');
