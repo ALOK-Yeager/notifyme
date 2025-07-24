@@ -15,6 +15,7 @@ ios/Pods/
 # Environment files (contain sensitive information)
 .env
 backend/.env
+backend/firebase-key.json
 
 # Build and generated files
 build/
