@@ -1,0 +1,25 @@
+# ninja log v5
+12	122	0	C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/x86/CMakeFiles/cmake.verify_globs	a5b154031754b942
+125	18773	7750281245418645	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	238339fee18a791c
+19806	20273	7750281260475688	C:/Users/shash/notifyme/android/app/build/intermediates/cxx/Debug/5jj2955m/obj/x86/libappmodules.so	bc6cea34b3b44f9a
+60	18340	7750281240664592	CMakeFiles/appmodules.dir/C_/Users/shash/notifyme/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	b32a47c42dcf0a5f
+157	16993	7750281227340716	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	1ba3b8d098690e9b
+142	17880	7750281236373656	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	1ba93f530df284f2
+47	19806	7750281255542772	CMakeFiles/appmodules.dir/OnLoad.cpp.o	4fa79396d8b89e9
+142	2318	7750402468606455	build.ninja	bcbe5dceede7d412
+108	14364	7750281201125397	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	87047ec4f0666c02
+191	12765	7750281185177076	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	5b51428eebe8bf55
+80	16267	7750281219915474	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	7f0163af06932dcd
+93	19308	7750281250789145	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	33b835c5a8bd3f5d
+1	28	0	clean	3e7924eeeecfa688
+4	97	0	C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/x86/CMakeFiles/cmake.verify_globs	a5b154031754b942
+181	13300	7750402604159542	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	5b51428eebe8bf55
+84	15116	7750402622931607	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	87047ec4f0666c02
+102	18232	7750402655472232	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	7f0163af06932dcd
+157	18757	7750402659615901	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	1ba3b8d098690e9b
+136	19947	7750402669986160	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	1ba93f530df284f2
+52	20768	7750402680397763	CMakeFiles/appmodules.dir/C_/Users/shash/notifyme/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	b32a47c42dcf0a5f
+117	21391	7750402687065423	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	238339fee18a791c
+68	21961	7750402692779554	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	33b835c5a8bd3f5d
+38	22737	7750402700318517	CMakeFiles/appmodules.dir/OnLoad.cpp.o	4fa79396d8b89e9
+22739	23168	7750402704925979	C:/Users/shash/notifyme/android/app/build/intermediates/cxx/Debug/5jj2955m/obj/x86/libappmodules.so	bc6cea34b3b44f9a

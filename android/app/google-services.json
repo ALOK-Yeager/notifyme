@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746852438562",
+    "project_id": "alok-notifyme",
+    "storage_bucket": "alok-notifyme.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746852438562:android:411b7eb18c3e36790ab07b",
+        "android_client_info": {
+          "package_name": "com.notifyme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDX_J3ZZaL0qG4wJOCMmw1VYd0VHy2iw9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,6 @@
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/CMakeFiles/appmodules.dir
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/edit_cache.dir
+C:/Users/shash/notifyme/android/app/.cxx/Debug/5jj2955m/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/rebuild_cache.dir

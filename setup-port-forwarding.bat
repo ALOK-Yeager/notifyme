@@ -1,0 +1,6 @@
+@echo off
+echo Setting up reverse port forwarding for Metro bundler on port 8083...
+adb reverse tcp:8083 tcp:8083
+echo Setting up reverse port forwarding for backend on port 3000...
+adb reverse tcp:3000 tcp:3000
+echo Done! Your phone should now be able to connect to both the Metro bundler and the backend.
